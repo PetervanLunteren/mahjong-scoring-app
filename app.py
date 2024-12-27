@@ -57,7 +57,7 @@ if st.session_state.step == 1:
     # Image in the center
     with col5:
         # Replace with the path to your image
-        image = Image.open('top-view.jpg')  # Adjust image path
+        image = Image.open('top-view2.jpg')  # Adjust image path
         st.image(image, use_container_width=True)
 
 
