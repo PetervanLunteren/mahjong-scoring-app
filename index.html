@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahjong Scoring App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Welcome/Setup Screen -->
+        <div id="welcome-screen" class="welcome-screen">
+            <div class="welcome-content">
+                <h1>Mahjong Scoring</h1>
+                <p class="welcome-subtitle">Chinese Official Rules</p>
+
+                <form id="setup-form" class="setup-form">
+                    <h2>Setup Game</h2>
+
+                    <div class="form-group">
+                        <label for="setup-player-1">Player 1 Name:</label>
+                        <input type="text" id="setup-player-1" placeholder="Enter name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="setup-player-2">Player 2 Name:</label>
+                        <input type="text" id="setup-player-2" placeholder="Enter name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="setup-player-3">Player 3 Name:</label>
+                        <input type="text" id="setup-player-3" placeholder="Enter name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="setup-player-4">Player 4 Name:</label>
+                        <input type="text" id="setup-player-4" placeholder="Enter name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="setup-starting-score">Starting Points:</label>
+                        <input type="number" id="setup-starting-score" value="25000" min="0" step="1000" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">Start Game</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="game-screen" style="display: none;">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>Mahjong Scoring</h1>
+            <div class="game-info">
+                <span id="current-round-display" class="round-display"></span>
+                <span id="dealer-display" class="dealer-display"></span>
+                <span id="total-hands-display" class="hands-count"></span>
+            </div>
+            <button id="settings-btn" class="icon-btn" aria-label="Settings">⚙️</button>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Column: Scores & Hand Entry -->
+            <div class="left-column">
+                <!-- Score Table -->
+                <section class="score-section">
+                    <h2>Scores</h2>
+                    <table id="score-table" class="score-table">
+                        <thead>
+                            <tr>
+                                <th>Wind</th>
+                                <th>Player</th>
+                                <th>Score</th>
+                                <th class="plus-minus-col">+/-</th>
+                            </tr>
+                        </thead>
+                        <tbody id="score-table-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Hand Entry Form -->
+                <section class="hand-entry-section">
+                    <h2>Record Hand</h2>
+                    <form id="hand-entry-form">
+                        <div class="form-group">
+                            <label for="hand-winner-select">Who had Mahjong?</label>
+                            <select id="hand-winner-select" required>
+                                <option value="">-- Select Player --</option>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+
+                        <div id="mahjong-details" style="display: none;">
+                            <div class="form-group">
+                                <label for="base-points">Points:</label>
+                                <input type="number" id="base-points" min="0" step="1" placeholder="Enter points value">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="win-type-select">Win Type:</label>
+                                <select id="win-type-select">
+                                    <option value="self-draw">Self-draw (自摸)</option>
+                                    <option value="discard">Win on discard (点炮)</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" id="discarder-group" style="display: none;">
+                                <label for="discarder-select">Who discarded?</label>
+                                <select id="discarder-select">
+                                    <!-- Populated by JS -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Calculated Score Changes:</label>
+                                <div class="score-display" id="score-display">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Hand</button>
+                            <button type="button" id="undo-btn" class="btn btn-secondary">Undo Last Hand</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!-- Right Column: History -->
+            <div class="right-column">
+                <section class="history-section">
+                    <h2>Hand History</h2>
+                    <div id="history-list" class="history-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="close-btn" id="close-settings-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3>Game Setup</h3>
+                        <div class="form-group">
+                            <label for="setup-starting-points">Starting Points:</label>
+                            <input type="number" id="setup-starting-points" min="0" step="1000" value="25000">
+                        </div>
+                        <div class="form-group">
+                            <label>Player Names:</label>
+                            <input type="text" id="player-name-0" placeholder="East" class="player-name-input">
+                            <input type="text" id="player-name-1" placeholder="South" class="player-name-input">
+                            <input type="text" id="player-name-2" placeholder="West" class="player-name-input">
+                            <input type="text" id="player-name-3" placeholder="North" class="player-name-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="starting-dealer-select">Starting Dealer:</label>
+                            <select id="starting-dealer-select">
+                                <option value="0">East</option>
+                                <option value="1">South</option>
+                                <option value="2">West</option>
+                                <option value="3">North</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Display Options</h3>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="show-plus-minus" checked>
+                            Show +/- column
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="highlight-dealer" checked>
+                            Highlight current dealer
+                        </label>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Game Actions</h3>
+                        <button id="new-game-btn" class="btn btn-primary">Start New Game</button>
+                        <button id="reset-all-btn" class="btn btn-danger">Reset All Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirm-modal" class="modal">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h3 id="confirm-title">Confirm</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="confirm-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirm-yes-btn" class="btn btn-primary">Yes</button>
+                    <button id="confirm-no-btn" class="btn btn-secondary">No</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
