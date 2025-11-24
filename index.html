@@ -12,37 +12,42 @@
         <div id="welcome-screen" class="welcome-screen">
             <div class="welcome-content">
                 <h1>Mahjong Scoring</h1>
-                <p class="welcome-subtitle">Chinese Official Rules</p>
+                <p class="welcome-subtitle">Nederlandse NTS Regels</p>
 
                 <form id="setup-form" class="setup-form">
-                    <h2>Setup Game</h2>
+                    <h2>Spel Instellen</h2>
 
                     <div class="form-group">
-                        <label for="setup-player-1">Player 1 Name:</label>
-                        <input type="text" id="setup-player-1" placeholder="Enter name" required>
+                        <label for="setup-player-1">Speler 1 Naam:</label>
+                        <input type="text" id="setup-player-1" placeholder="Voer naam in" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="setup-player-2">Player 2 Name:</label>
-                        <input type="text" id="setup-player-2" placeholder="Enter name" required>
+                        <label for="setup-player-2">Speler 2 Naam:</label>
+                        <input type="text" id="setup-player-2" placeholder="Voer naam in" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="setup-player-3">Player 3 Name:</label>
-                        <input type="text" id="setup-player-3" placeholder="Enter name" required>
+                        <label for="setup-player-3">Speler 3 Naam:</label>
+                        <input type="text" id="setup-player-3" placeholder="Voer naam in" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="setup-player-4">Player 4 Name:</label>
-                        <input type="text" id="setup-player-4" placeholder="Enter name" required>
+                        <label for="setup-player-4">Speler 4 Naam:</label>
+                        <input type="text" id="setup-player-4" placeholder="Voer naam in" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="setup-starting-score">Starting Points:</label>
-                        <input type="number" id="setup-starting-score" value="25000" min="0" step="1000" required>
+                        <label for="setup-starting-dealer">Wie begint als Oost (dealer)?</label>
+                        <select id="setup-starting-dealer" required>
+                            <option value="0">Speler 1</option>
+                            <option value="1">Speler 2</option>
+                            <option value="2">Speler 3</option>
+                            <option value="3">Speler 4</option>
+                        </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-large">Start Game</button>
+                    <button type="submit" class="btn btn-primary btn-large">Start Spel</button>
                 </form>
             </div>
         </div>
@@ -62,61 +67,39 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Left Column: Scores & Hand Entry -->
-            <div class="left-column">
-                <!-- Score Table -->
-                <section class="score-section">
-                    <h2>Scores</h2>
-                    <table id="score-table" class="score-table">
-                        <thead>
-                            <tr>
-                                <th>Wind</th>
-                                <th>Player</th>
-                                <th>Score</th>
-                                <th class="plus-minus-col">+/-</th>
-                            </tr>
-                        </thead>
-                        <tbody id="score-table-body">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
+            <!-- Full Width: Score Sheet -->
+            <div class="score-sheet-container">
+                <!-- Current Scores -->
+                <section class="current-scores-section">
+                    <h2>Huidige Scores</h2>
+                    <div class="current-scores" id="current-scores">
+                        <!-- Populated by JS -->
+                    </div>
                 </section>
 
                 <!-- Hand Entry Form -->
                 <section class="hand-entry-section">
-                    <h2>Record Hand</h2>
+                    <h2>Noteer Hand <span id="current-hand-number"></span></h2>
                     <form id="hand-entry-form">
                         <div class="form-group">
-                            <label for="hand-winner-select">Who had Mahjong?</label>
-                            <select id="hand-winner-select" required>
-                                <option value="">-- Select Player --</option>
+                            <label>Wie had Mahjong?</label>
+                            <div class="segmented-control" id="hand-winner-buttons">
                                 <!-- Populated by JS -->
-                            </select>
+                            </div>
+                            <input type="hidden" id="hand-winner-select" required>
                         </div>
 
                         <div id="mahjong-details" style="display: none;">
                             <div class="form-group">
-                                <label for="base-points">Points:</label>
-                                <input type="number" id="base-points" min="0" step="1" placeholder="Enter points value">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="win-type-select">Win Type:</label>
-                                <select id="win-type-select">
-                                    <option value="self-draw">Self-draw (自摸)</option>
-                                    <option value="discard">Win on discard (点炮)</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group" id="discarder-group" style="display: none;">
-                                <label for="discarder-select">Who discarded?</label>
-                                <select id="discarder-select">
+                                <label>Individuele Punten (per speler):</label>
+                                <p class="help-text">Voer de puntwaarde van elke speler in. De app berekent de afrekening volgens NTS regels (Oost betaalt/ontvangt dubbel).</p>
+                                <div class="individual-counts" id="individual-counts">
                                     <!-- Populated by JS -->
-                                </select>
+                                </div>
                             </div>
 
                             <div class="form-group">
-                                <label>Calculated Score Changes:</label>
+                                <label>Berekende NTS Afrekening:</label>
                                 <div class="score-display" id="score-display">
                                     <!-- Populated by JS -->
                                 </div>
@@ -124,19 +107,33 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Hand</button>
-                            <button type="button" id="undo-btn" class="btn btn-secondary">Undo Last Hand</button>
+                            <button type="submit" class="btn btn-primary">Bewaar Hand</button>
+                            <button type="button" id="undo-btn" class="btn btn-secondary">Ongedaan Maken</button>
                         </div>
                     </form>
                 </section>
-            </div>
 
-            <!-- Right Column: History -->
-            <div class="right-column">
-                <section class="history-section">
-                    <h2>Hand History</h2>
-                    <div id="history-list" class="history-list">
-                        <!-- Populated by JS -->
+                <!-- Score Sheet Table -->
+                <section class="score-sheet-section">
+                    <h2>Scoreblad (16 Ronden)</h2>
+                    <div class="score-sheet-wrapper">
+                        <table id="score-sheet-table" class="score-sheet-table">
+                            <thead>
+                                <tr>
+                                    <th>Hand</th>
+                                    <th>Wind</th>
+                                    <th>Oost</th>
+                                    <th id="player-col-0">Speler 1</th>
+                                    <th id="player-col-1">Speler 2</th>
+                                    <th id="player-col-2">Speler 3</th>
+                                    <th id="player-col-3">Speler 4</th>
+                                    <th>Winnaar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="score-sheet-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
                     </div>
                 </section>
             </div>
@@ -146,50 +143,46 @@
         <div id="settings-modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Settings</h2>
+                    <h2>Instellingen</h2>
                     <button class="close-btn" id="close-settings-btn">&times;</button>
                 </div>
                 <div class="modal-body">
                     <div class="settings-section">
-                        <h3>Game Setup</h3>
+                        <h3>Spel Instelling</h3>
                         <div class="form-group">
-                            <label for="setup-starting-points">Starting Points:</label>
-                            <input type="number" id="setup-starting-points" min="0" step="1000" value="25000">
-                        </div>
-                        <div class="form-group">
-                            <label>Player Names:</label>
-                            <input type="text" id="player-name-0" placeholder="East" class="player-name-input">
-                            <input type="text" id="player-name-1" placeholder="South" class="player-name-input">
+                            <label>Speler Namen:</label>
+                            <input type="text" id="player-name-0" placeholder="Oost" class="player-name-input">
+                            <input type="text" id="player-name-1" placeholder="Zuid" class="player-name-input">
                             <input type="text" id="player-name-2" placeholder="West" class="player-name-input">
-                            <input type="text" id="player-name-3" placeholder="North" class="player-name-input">
+                            <input type="text" id="player-name-3" placeholder="Noord" class="player-name-input">
                         </div>
                         <div class="form-group">
-                            <label for="starting-dealer-select">Starting Dealer:</label>
+                            <label for="starting-dealer-select">Startende Dealer:</label>
                             <select id="starting-dealer-select">
-                                <option value="0">East</option>
-                                <option value="1">South</option>
+                                <option value="0">Oost</option>
+                                <option value="1">Zuid</option>
                                 <option value="2">West</option>
-                                <option value="3">North</option>
+                                <option value="3">Noord</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="settings-section">
-                        <h3>Display Options</h3>
+                        <h3>Weergave Opties</h3>
                         <label class="checkbox-label">
                             <input type="checkbox" id="show-plus-minus" checked>
-                            Show +/- column
+                            Toon +/- kolom
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" id="highlight-dealer" checked>
-                            Highlight current dealer
+                            Markeer huidige dealer
                         </label>
                     </div>
 
                     <div class="settings-section">
-                        <h3>Game Actions</h3>
-                        <button id="new-game-btn" class="btn btn-primary">Start New Game</button>
-                        <button id="reset-all-btn" class="btn btn-danger">Reset All Data</button>
+                        <h3>Spel Acties</h3>
+                        <button id="new-game-btn" class="btn btn-primary">Start Nieuw Spel</button>
+                        <button id="reset-all-btn" class="btn btn-danger">Reset Alle Data</button>
                     </div>
                 </div>
             </div>
@@ -199,14 +192,14 @@
         <div id="confirm-modal" class="modal">
             <div class="modal-content modal-small">
                 <div class="modal-header">
-                    <h3 id="confirm-title">Confirm</h3>
+                    <h3 id="confirm-title">Bevestigen</h3>
                 </div>
                 <div class="modal-body">
                     <p id="confirm-message"></p>
                 </div>
                 <div class="modal-footer">
-                    <button id="confirm-yes-btn" class="btn btn-primary">Yes</button>
-                    <button id="confirm-no-btn" class="btn btn-secondary">No</button>
+                    <button id="confirm-yes-btn" class="btn btn-primary">Ja</button>
+                    <button id="confirm-no-btn" class="btn btn-secondary">Nee</button>
                 </div>
             </div>
         </div>

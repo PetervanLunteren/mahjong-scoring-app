@@ -134,17 +134,14 @@ body {
 
 /* Main Content */
 .main-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
     padding: 2rem;
     flex: 1;
+    overflow-y: auto;
 }
 
-@media (max-width: 1024px) {
-    .main-content {
-        grid-template-columns: 1fr;
-    }
+.score-sheet-container {
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 /* Sections */
@@ -160,72 +157,139 @@ section h2 {
     padding-bottom: 0.5rem;
 }
 
-/* Score Table */
-.score-table {
+/* Current Scores */
+.current-scores {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.current-score-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    border: 2px solid #e9ecef;
+}
+
+.current-score-card.dealer {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+}
+
+.current-score-name {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.current-score-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: #2c3e50;
+}
+
+.current-score-diff {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+}
+
+.current-score-diff.positive {
+    color: #28a745;
+}
+
+.current-score-diff.negative {
+    color: #dc3545;
+}
+
+/* Score Sheet Table */
+.score-sheet-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.score-sheet-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 1rem;
-}
-
-.score-table th,
-.score-table td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.score-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #555;
     font-size: 0.9rem;
-    text-transform: uppercase;
 }
 
-.score-table tbody tr {
+.score-sheet-table thead {
+    position: sticky;
+    top: 0;
+    background-color: #2c3e50;
+    color: white;
+    z-index: 10;
+}
+
+.score-sheet-table th {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    font-weight: 600;
+    border: 1px solid #34495e;
+}
+
+.score-sheet-table td {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+}
+
+.score-sheet-table tbody tr {
     transition: background-color 0.2s;
 }
 
-.score-table tbody tr:hover {
-    background-color: #f8f9fa;
+.score-sheet-table tbody tr:nth-child(even) {
+    background-color: #fafbfc;
 }
 
-.score-table tbody tr.dealer-row {
-    background-color: #fff3cd;
+.score-sheet-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+.score-sheet-table tbody tr.current-hand {
+    background-color: #d4edda;
     font-weight: 600;
 }
 
-.score-table tbody tr.dealer-row:hover {
-    background-color: #ffe69c;
+.score-sheet-table tbody tr.completed-hand {
+    opacity: 0.7;
 }
 
-.wind-cell {
+.hand-number {
     font-weight: 600;
-    font-size: 1.1rem;
+    color: #2c3e50;
 }
 
-.score-cell {
+.wind-round {
+    font-weight: 600;
+    color: #3498db;
+}
+
+.east-player {
+    font-weight: 600;
+    color: #e67e22;
+}
+
+.score-value {
     font-family: 'Courier New', monospace;
-    font-size: 1.05rem;
+    font-weight: 600;
 }
 
-.plus-minus-positive {
+.score-value.positive {
     color: #28a745;
-    font-weight: 600;
 }
 
-.plus-minus-negative {
+.score-value.negative {
     color: #dc3545;
-    font-weight: 600;
 }
 
-.plus-minus-zero {
-    color: #6c757d;
-}
-
-/* Hide +/- column when disabled */
-.score-table .plus-minus-col.hidden {
-    display: none;
+.score-value.empty {
+    color: #ccc;
 }
 
 /* Form Styles */
@@ -261,7 +325,75 @@ section h2 {
     margin-bottom: 0.5rem;
 }
 
-/* Score Inputs */
+/* Segmented Control */
+.segmented-control {
+    display: flex;
+    width: 100%;
+    gap: 0.75rem;
+}
+
+.segmented-button {
+    flex: 1;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #495057;
+}
+
+.segmented-button:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.segmented-button.active {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Individual Counts */
+.individual-counts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.individual-count-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.individual-count-group label {
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.individual-count-group input {
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-family: 'Courier New', monospace;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.help-text {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1rem;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+/* Score Inputs (kept for backward compatibility) */
 .score-inputs {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -613,11 +745,19 @@ section h2 {
 
     .main-content {
         padding: 1rem;
-        gap: 1rem;
     }
 
-    .score-inputs {
+    .current-scores {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .individual-counts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .segmented-button {
+        padding: 0.875rem 0.5rem;
+        font-size: 0.9rem;
     }
 
     .form-actions {
@@ -628,8 +768,13 @@ section h2 {
         width: 100%;
     }
 
-    .history-scores {
-        grid-template-columns: 1fr;
+    .score-sheet-table {
+        font-size: 0.8rem;
+    }
+
+    .score-sheet-table th,
+    .score-sheet-table td {
+        padding: 0.5rem 0.25rem;
     }
 }
 
