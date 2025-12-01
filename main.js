@@ -197,7 +197,7 @@ function renderCurrentScores() {
         const card = document.createElement('div');
         card.className = `current-score-card ${isDealer ? 'dealer' : ''}`;
         card.innerHTML = `
-            <div class="current-score-name">${player.name} ${isDealer ? '⭐ Oost' : ''}</div>
+            <div class="current-score-name">${player.name}</div>
             <div class="current-score-value">${score.toLocaleString()}</div>
             <div class="current-score-diff ${diffClass}">${diffText}</div>
         `;
@@ -273,14 +273,8 @@ function renderScoreSheet() {
 }
 
 function renderGameInfo() {
-    const roundLabel = getCurrentRoundLabel();
-    const prevailingWind = getPrevailingWindName();
     const currentHandNum = state.history.length + 1;
-
-    document.getElementById('current-round-display').textContent = `${prevailingWind} Round: ${roundLabel}`;
-    document.getElementById('dealer-display').textContent = `Dealer: ${state.players[state.currentDealer].name} (East)`;
-    document.getElementById('total-hands-display').textContent = `Hands Played: ${state.history.length}/16`;
-    document.getElementById('current-hand-number').textContent = `#${currentHandNum}`;
+    document.getElementById('current-hand-number').textContent = `${currentHandNum}`;
 }
 
 function renderHandEntryForm() {
@@ -452,7 +446,7 @@ function handleHandSubmit(e) {
 
     // Validate winner is selected
     if (winnerValue === '') {
-        alert('Please select who had Mahjong');
+        alert('Selecteer wie Mahjong had');
         return;
     }
 
@@ -468,7 +462,7 @@ function handleHandSubmit(e) {
     // Validate at least one count was entered
     const hasAnyCounts = individualCounts.some(count => count !== 0);
     if (!hasAnyCounts) {
-        alert('Please enter at least one individual count');
+        alert('Voer minimaal één individueel punt in');
         return;
     }
 
@@ -503,13 +497,13 @@ function resetHandForm() {
 
 function handleUndo() {
     if (state.history.length === 0) {
-        alert('No hands to undo');
+        alert('Geen handen om ongedaan te maken');
         return;
     }
 
     showConfirm(
-        'Undo Last Hand',
-        'Are you sure you want to undo the last hand?',
+        'Laatste Hand Ongedaan Maken',
+        'Weet je zeker dat je de laatste hand ongedaan wilt maken?',
         () => {
             undoLastHand();
             renderAll();
@@ -519,8 +513,8 @@ function handleUndo() {
 
 function handleNewGame() {
     showConfirm(
-        'Start New Game',
-        'Start a new game? This will reset all scores and history. Player names will be kept.',
+        'Start Nieuw Spel',
+        'Nieuw spel starten? Dit zal alle scores en geschiedenis resetten. Spelernamen blijven behouden.',
         () => {
             startNewGame(true);
             renderAll();
@@ -531,8 +525,8 @@ function handleNewGame() {
 
 function handleResetAll() {
     showConfirm(
-        'Reset All Data',
-        'This will delete all data including player names and settings. Are you sure?',
+        'Reset Alle Data',
+        'Dit zal alle data inclusief spelernamen en instellingen verwijderen. Weet je het zeker?',
         () => {
             resetState();
             closeModal('settings-modal');

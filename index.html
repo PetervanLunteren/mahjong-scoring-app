@@ -57,11 +57,6 @@
         <!-- Header -->
         <header class="app-header">
             <h1>Mahjong Scoring</h1>
-            <div class="game-info">
-                <span id="current-round-display" class="round-display"></span>
-                <span id="dealer-display" class="dealer-display"></span>
-                <span id="total-hands-display" class="hands-count"></span>
-            </div>
             <button id="settings-btn" class="icon-btn" aria-label="Settings">⚙️</button>
         </header>
 
@@ -71,7 +66,7 @@
             <div class="score-sheet-container">
                 <!-- Current Scores -->
                 <section class="current-scores-section">
-                    <h2>Huidige Scores</h2>
+                    <h2>Score</h2>
                     <div class="current-scores" id="current-scores">
                         <!-- Populated by JS -->
                     </div>
@@ -79,10 +74,10 @@
 
                 <!-- Hand Entry Form -->
                 <section class="hand-entry-section">
-                    <h2>Noteer Hand <span id="current-hand-number"></span></h2>
+                    <h2>Nieuwe ronde</h2>
                     <form id="hand-entry-form">
                         <div class="form-group">
-                            <label>Wie had Mahjong?</label>
+                            <label>Mahjong</label>
                             <div class="segmented-control" id="hand-winner-buttons">
                                 <!-- Populated by JS -->
                             </div>
@@ -91,15 +86,14 @@
 
                         <div id="mahjong-details" style="display: none;">
                             <div class="form-group">
-                                <label>Individuele Punten (per speler):</label>
-                                <p class="help-text">Voer de puntwaarde van elke speler in. De app berekent de afrekening volgens NTS regels (Oost betaalt/ontvangt dubbel).</p>
+                                <label>Punten</label>
                                 <div class="individual-counts" id="individual-counts">
                                     <!-- Populated by JS -->
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label>Berekende NTS Afrekening:</label>
+                                <label>Afrekening</label>
                                 <div class="score-display" id="score-display">
                                     <!-- Populated by JS -->
                                 </div>
@@ -108,14 +102,13 @@
 
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Bewaar Hand</button>
-                            <button type="button" id="undo-btn" class="btn btn-secondary">Ongedaan Maken</button>
                         </div>
                     </form>
                 </section>
 
                 <!-- Score Sheet Table -->
                 <section class="score-sheet-section">
-                    <h2>Scoreblad (16 Ronden)</h2>
+                    <h2>Overzicht</h2>
                     <div class="score-sheet-wrapper">
                         <table id="score-sheet-table" class="score-sheet-table">
                             <thead>
