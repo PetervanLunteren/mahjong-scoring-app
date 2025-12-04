@@ -701,7 +701,8 @@ function setupGameListeners() {
     gameListenersSetup = true;
 
     document.getElementById('hand-entry-form').addEventListener('submit', handleHandSubmit);
-    document.getElementById('undo-btn').addEventListener('click', handleUndo);
+    // Undo button removed from UI
+    // document.getElementById('undo-btn').addEventListener('click', handleUndo);
 
     // Individual count input changes - delegate to parent container
     document.getElementById('individual-counts').addEventListener('input', (e) => {
